@@ -1,0 +1,50 @@
+// This is part of the ECE241 final project
+// Date created: November 14 2016
+// This file contains the data registers, there are 24 in total
+
+module cpu_data_reg(clk, rst, alu_out_to_reg, reg_address, write_enable, data_reg_out);
+    input clk;
+    input rst;
+    input [7:0]alu_out_to_reg;
+    input [4:0]reg_address;
+    input write_enable;
+    output [7:0]data_reg_out;
+
+    reg [7:0]data_reg[24];
+
+    always @ (posedge clk)
+    begin
+        if (rst)
+        begin
+            data_reg[0] <= 8'b0;
+            data_reg[1] <= 8'b0;
+            data_reg[2] <= 8'b0;
+            data_reg[3] <= 8'b0;
+            data_reg[4] <= 8'b0;
+            data_reg[5] <= 8'b0;
+            data_reg[6] <= 8'b0;
+            data_reg[7] <= 8'b0;
+            data_reg[8] <= 8'b0;
+            data_reg[9] <= 8'b0;
+            data_reg[10] <= 8'b0;
+            data_reg[11] <= 8'b0;
+            data_reg[12] <= 8'b0;
+            data_reg[13] <= 8'b0;
+            data_reg[14] <= 8'b0;
+            data_reg[15] <= 8'b0;
+            data_reg[16] <= 8'b0;
+            data_reg[17] <= 8'b0;
+            data_reg[18] <= 8'b0;
+            data_reg[19] <= 8'b0;
+            data_reg[20] <= 8'b0;
+            data_reg[21] <= 8'b0;
+            data_reg[22] <= 8'b0;
+            data_reg[23] <= 8'b0;
+        end
+        else if (write_enable)
+        begin
+            data_reg[reg_address - 8] <= alu_out_to_reg;
+        end
+    end
+    assign data_reg_out = (reg_address > 5'd7 ) ? data_reg[reg_address - 8] : 8'b0; // Output 
+endmodule

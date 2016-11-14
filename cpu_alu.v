@@ -2,16 +2,12 @@
 // Date created: November 10 2016
 // This file contains the ALU(Arithmetic logic Unit) of The CPU
 
-// The constants for status_register
-`define STATUS_C 0
-`define STATUS_DC 1
-`define STATUS_Z 2
-
 module cpu_alu(alu_op_in, alu_in_w, alu_in_mux, status_carry_in, alu_out, status_c_load, status_dc_load, status_z_load, alu_status_out);
+    `include "definition.vh"
     input [11:0]alu_op_in;
     input [7:0]alu_in_w;
     input [7:0]alu_in_mux;
-    input status_status_carry_in;
+    input status_carry_in;
     output reg [7:0]alu_out;
     output reg status_c_load, status_dc_load, status_z_load;
     output reg [2:0]alu_status_out;
@@ -38,7 +34,6 @@ module cpu_alu(alu_op_in, alu_in_w, alu_in_mux, status_carry_in, alu_out, status
         mask = 8'b0;
 
         casex(alu_op_in)
-        begin
             12'b000111xxxxxx: //ADDWF status register C,DC,Z
             begin
                 {alu_status_out[`STATUS_C], alu_out} = alu_in_w + alu_in_mux;
@@ -108,7 +103,7 @@ module cpu_alu(alu_op_in, alu_in_w, alu_in_mux, status_carry_in, alu_out, status
             end
             12'b0000001xxxxx: //MOVWF status none
             begin
-                //Does nothing
+                alu_out = alu_in_w;
             end
             12'b000000000000: //NOP status none
             begin
@@ -130,7 +125,7 @@ module cpu_alu(alu_op_in, alu_in_w, alu_in_mux, status_carry_in, alu_out, status
                 alu_status_out[`STATUS_C] = alu_in_mux >= alu_in_w;
                 alu_status_out[`STATUS_DC] = alu_in_mux[3:0] >= alu_in_w[3:0];
                 alu_status_out[`STATUS_Z] = (alu_out == 12'b0);
-                n status_c_load = 1'b1;
+                status_c_load = 1'b1;
                 status_dc_load = 1'b1;
                 status_z_load = 1'b1;
             end
