@@ -24,7 +24,7 @@ module cpu_status_reg(clk, rst, alu_to_status, status_bus, load_status_reg, stat
             if (load_status_reg)
             begin
                 if(status_c_load||status_dc_load||status_z_load)
-                    status_reg_out[7:`STATUS_Z] <= alu_to_status[7:`STATUS_Z]; //Write to C,DC,Z is disabled
+                    status_reg_out[7:`STATUS_Z] <= alu_to_status[7:`STATUS_Z]; //Write to C,DC,Z is disabled if any of the status_X_load is high
                 else
                     status_reg_out <= alu_to_status;
             end

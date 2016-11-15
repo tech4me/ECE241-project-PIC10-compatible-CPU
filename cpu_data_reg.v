@@ -10,7 +10,7 @@ module cpu_data_reg(clk, rst, alu_out_to_reg, reg_address, write_enable, data_re
     input write_enable;
     output [7:0]data_reg_out;
 
-    reg [7:0]data_reg[24];
+    reg [7:0]data_reg[0:23];
 
     always @ (posedge clk)
     begin

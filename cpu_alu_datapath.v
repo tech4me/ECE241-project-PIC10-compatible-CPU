@@ -20,9 +20,9 @@ module cpu_alu_datapath(clk, rst, instruction_in, sfr_in, data_reg_in, carry_bit
     output status_dc_load;
     output status_z_load;
 
-    wire wire_w_accumulator;
-    wire wire_mux_to_alu;
-    wire wire_alu_output;
+    wire [7:0]wire_w_accumulator;
+    wire [7:0]wire_mux_to_alu;
+    wire [7:0]wire_alu_output;
 
     // The alu module
     cpu_alu alu
@@ -56,4 +56,5 @@ module cpu_alu_datapath(clk, rst, instruction_in, sfr_in, data_reg_in, carry_bit
         .alu_to_w(wire_alu_output),
         .w_accumulator_out(wire_w_accumulator)
     );
+    assign alu_to_reg = wire_alu_output; // The ouput of ALU
 endmodule

@@ -6,4 +6,7 @@
 `define STATUS_DC 1
 `define STATUS_Z 2
 
+// The definition for the depth of the stack
+`define STACK_DEPTH 2
+
 `endif
