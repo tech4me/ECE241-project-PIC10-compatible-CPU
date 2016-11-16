@@ -7,13 +7,13 @@ module cpu_instruction_reg(clk, rst, load_instruction, program_to_reg, instructi
     input rst;
     input load_instruction;
     input [11:0]program_to_reg;
-    output reg instruction_reg_out;
+    output reg [11:0]instruction_reg_out;
 
     always @ (posedge clk)
     begin
         if (rst)
             instruction_reg_out <= 8'b0;
         else if (load_instruction)
-            instruction_reg_out <= load_instruction;
+            instruction_reg_out <= program_to_reg;
     end
 endmodule
