@@ -12,7 +12,6 @@ module cpu_pc_mux(pc_mux_select, stack_in, alu_in, instruction_in, pc_mux_out);
     always @ (*)
     begin
         case (pc_mux_select) 
-        begin
           2'd0: pc_mux_out = stack_in;
           2'd1: pc_mux_out = {1'b0, alu_in};
           2'd2: pc_mux_out = instruction_in;

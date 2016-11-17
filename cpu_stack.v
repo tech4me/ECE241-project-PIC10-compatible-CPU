@@ -22,7 +22,7 @@ module cpu_stack(clk, rst, load_stack, dec_stack_ptr, inc_stack_ptr, pc_to_stack
         if (rst)
         begin
             ptr <= 1'b0;
-            for (i = 0; i < `STACK_DEPTH; i++)
+            for (i = 0; i < `STACK_DEPTH; i = i + 1)
                 stack[i] <= 9'b0;
         end
         else if (load_stack)

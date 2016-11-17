@@ -3,6 +3,11 @@
 // This file contains the datapath for the program counter, instruction register and stack
 
 module cpu_instruction_datapath(clk, rst, program_bus, nop_insert, load_instruction, pc_mux_select, load_pc, inc_pc, alu_output, inc_stack, dec_stack, load_stack, instruction_reg_out, pc_to_program_rom);
+    `include "cpu_nop_mux.v"
+    `include "cpu_instruction_reg.v"
+    `include "cpu_pc_mux.v"
+    `include "cpu_pc.v"
+    `include "cpu_stack.v"
     input clk;
     input rst;
     input [11:0]program_bus;
@@ -47,8 +52,8 @@ module cpu_instruction_datapath(clk, rst, program_bus, nop_insert, load_instruct
     (
         .pc_mux_select(pc_mux_select),
         .stack_in(wire_stack_to_pc_mux),
-        .alu_in({1'b0, alu_output}),
-        .instruction_in(wire_instruction_reg_to_pc_mux),
+        .alu_in(alu_output),
+        .instruction_in(wire_instruction_reg_to_pc_mux[8:0]),
         .pc_mux_out(wire_pc_mux_to_pc)
     );
 
