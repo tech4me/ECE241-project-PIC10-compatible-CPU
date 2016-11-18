@@ -204,7 +204,15 @@ module cpu_alu(alu_op_in, alu_in_w, alu_in_mux, status_carry_in, alu_out, status
             begin
                 //SLEEP not implemented in this design
             end
-            `TRIS: //TRIS status none
+            `TRIS0: //TRIS0 status none
+            begin
+                alu_out = alu_in_w;
+            end
+            `TRIS1: //TRIS1 status none
+            begin
+                alu_out = alu_in_w;
+            end
+            `TRIS2: //TRIS2 status none
             begin
                 alu_out = alu_in_w;
             end

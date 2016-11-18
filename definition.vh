@@ -2,9 +2,9 @@
 `define DEFINITION_VH
 
 // The constants for status_register
-`define STATUS_C 0
-`define STATUS_DC 1
-`define STATUS_Z 2
+`define STATUS_C    0
+`define STATUS_DC   1
+`define STATUS_Z    2
 
 // The definition for the depth of the stack
 `define STACK_DEPTH 2
@@ -41,7 +41,19 @@
 `define OPTION  12'b000000000010
 `define RETLW   12'b1000xxxxxxxx
 `define SLEEP   12'b000000000011
-`define TRIS    12'b000000000xxx
+`define TRIS0   12'b000000000101 // GPIO0
+`define TRIS1   12'b000000000110 // GPIO1
+`define TRIS2   12'b000000000111 // GPIO2
 `define XORLW   12'b1111xxxxxxxx
+
+// The definition for sfr
+`define INDF    3'd0
+`define TMR0    3'd1
+`define PCL     3'd2
+`define STATUS  3'd3
+`define FSR     3'd4
+`define GPIO0   3'd5
+`define GPIO1   3'd6
+`define GPIO2   3'd7
 
 `endif

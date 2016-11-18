@@ -12,8 +12,8 @@ module cpu_status_reg(clk, rst, alu_to_status, status_bus, load_status_reg, stat
     input status_c_load;
     input status_dc_load;
     input status_z_load;
-    output status_c_load;
-    output reg status_reg_out;
+    output status_carry_bit;
+    output reg [7:0]status_reg_out;
 
     always @ (posedge clk)
     begin

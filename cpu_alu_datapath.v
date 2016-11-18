@@ -47,7 +47,7 @@ module cpu_alu_datapath(clk, rst, instruction_in, sfr_in, data_reg_in, carry_bit
         .mux_to_alu(wire_mux_to_alu)
     );
 
-    // The 
+    // The w_accumulator module
     cpu_w_accumulator w_accumulator
     (
         .clk(clk),
