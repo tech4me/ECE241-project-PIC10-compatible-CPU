@@ -1,8 +1,9 @@
 // This is part of the ECE241 final project
 // Date created: November 17 2016
-// This file contains the mux that choose one of the fsr to feed into the ALU
+// This file contains the mux that choose one of the sfr to feed into the ALU
 
-module cpu_fsr_mux(sfr_mux_select, indf_reg, tmr0_reg, pc_low_reg, status_reg, fsr_reg, gpio0, gpio1, gpio2, sfr_mux_out);
+module cpu_sfr_mux(sfr_mux_select, indf_reg, tmr0_reg, pc_low_reg, status_reg, fsr_reg, gpio0, gpio1, gpio2, sfr_mux_out);
+    `include "definition.vh"
     input [2:0]sfr_mux_select;
     input [7:0]indf_reg;
     input [7:0]tmr0_reg;

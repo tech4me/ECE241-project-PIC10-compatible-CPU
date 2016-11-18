@@ -17,7 +17,7 @@ module cpu_fsr_datapath(clk, rst, load_fsr, reg_address_mux_select, instruction_
     output [7:0]fsr_reg_out;
     output [7:0]ram_out;
 
-    wire [7:0]wire_sfr_to_address_mux;
+    wire [7:0]wire_fsr_to_address_mux;
     wire [4:0]wire_address_mux_to_data_reg;
 
     // The fsr module
@@ -27,7 +27,7 @@ module cpu_fsr_datapath(clk, rst, load_fsr, reg_address_mux_select, instruction_
         .rst(rst),
         .alu_to_fsr(alu_output),
         .load_fsr(load_fsr),
-        .sfr_out(wire_sfr_to_address_mux)
+        .fsr_out(wire_fsr_to_address_mux)
     );
 
     // The reg_address_mux module
@@ -35,7 +35,7 @@ module cpu_fsr_datapath(clk, rst, load_fsr, reg_address_mux_select, instruction_
     (
         .reg_address_mux_select(reg_address_mux_select),
         .instruction_reg_output(instruction_reg_output[4:0]),
-        .fsr_reg_output(wire_sfr_to_address_mux[4:0]),
+        .fsr_reg_output(wire_fsr_to_address_mux[4:0]),
         .reg_address_mux_out(wire_address_mux_to_data_reg)
     );
 
@@ -50,6 +50,6 @@ module cpu_fsr_datapath(clk, rst, load_fsr, reg_address_mux_select, instruction_
         .data_reg_out(ram_out)
     );
 
-    assign fsr_reg_out = wire_sfr_to_address_mux;
-
+    assign fsr_reg_out = wire_fsr_to_address_mux;
+    assign reg_address_out = wire_address_mux_to_data_reg;
 endmodule

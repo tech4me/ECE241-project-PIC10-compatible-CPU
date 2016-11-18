@@ -8,7 +8,6 @@ module cpu_datapath(clk, rst, store_alu_w, alu_in_select, load_status_reg, skip_
     `include "cpu_status_reg.v"
     `include "cpu_sfr_mux.v"
     `include "cpu_instruction_datapath.v"
-    `include "cpu_program_memory.v"
     `include "cpu_fsr_datapath.v"
     `include "cpu_gpio.v"
 
@@ -42,16 +41,9 @@ module cpu_datapath(clk, rst, store_alu_w, alu_in_select, load_status_reg, skip_
     inout [7:0]gpio2_bus;
 
     output [4:0]reg_address;
-    assign reg_address = wire_reg_address;
-
     output [11:0]instruction_reg_out;
-    assign instruction_reg_out = wire_instruction_bus;
-
     output [8:0]program_address;
-    assign program_address = wire_program_address;
-    
     output zero_result;
-    assign zero_result = wire_status_bus[`STATUS_Z];
 
     // alu_datapath wires
     wire [11:0]wire_instruction_bus;
@@ -78,6 +70,11 @@ module cpu_datapath(clk, rst, store_alu_w, alu_in_select, load_status_reg, skip_
     wire [7:0]gpio0_input;
     wire [7:0]gpio1_input;
     wire [7:0]gpio2_input;
+
+    assign reg_address = wire_reg_address;
+    assign instruction_reg_out = wire_instruction_bus;
+    assign program_address = wire_program_address;
+    assign zero_result = wire_status_bus[`STATUS_Z];
 
     // The alu_datapath module
     cpu_alu_datapath alu_datapath
@@ -154,7 +151,7 @@ module cpu_datapath(clk, rst, store_alu_w, alu_in_select, load_status_reg, skip_
         .rst(rst),
         .load_fsr(load_fsr),
         .reg_address_mux_select(reg_address_mux_select),
-        .instruction_reg_output(wire_instruction_bus[4:0]),
+        .instruction_reg_output(wire_instruction_bus),
         .load_ram(load_ram),
         .alu_output(wire_alu_bus),
         .reg_address_out(wire_reg_address),
@@ -187,7 +184,7 @@ module cpu_datapath(clk, rst, store_alu_w, alu_in_select, load_status_reg, skip_
     );
 
     // GPIO2
-    cpu_gpio gpio0
+    cpu_gpio gpio2
     (
         .clk(clk),
         .rst(rst),
