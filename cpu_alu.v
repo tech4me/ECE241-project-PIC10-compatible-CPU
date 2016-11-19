@@ -86,7 +86,7 @@ module cpu_alu(alu_op_in, alu_in_w, alu_in_mux, status_carry_in, alu_out, status
             end
             `INCFSZ: //INCFSZ status none
             begin
-                alu_out = alu_in_mux - 1'b1;
+                alu_out = alu_in_mux + 1'b1;
                 alu_status_out[`STATUS_Z] = (alu_out == 12'b0);
             end
             `IORWF: //IORWF status Z
