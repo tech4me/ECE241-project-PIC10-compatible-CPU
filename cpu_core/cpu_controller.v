@@ -11,7 +11,7 @@ module cpu_controller(clk, rst, reg_address, instruction_reg_out, zero_result, s
     input zero_result;
 
     output reg store_alu_w;
-    output reg alu_in_select;
+    output alu_in_select;
     output reg load_status_reg;
     output reg skip_next_instruction; 
     output reg load_instruction_reg;
@@ -32,7 +32,7 @@ module cpu_controller(clk, rst, reg_address, instruction_reg_out, zero_result, s
     output reg load_gpio1;
     output reg load_gpio2;
 
-    reg initial_ir_load_done = 0;
+    reg initial_ir_load_done = 1'b0;
 
     // Select signal for address mux, direct mode/indirect mode
     // select = 0 direct
@@ -43,6 +43,12 @@ module cpu_controller(clk, rst, reg_address, instruction_reg_out, zero_result, s
     // select = 0 sfr
     // select = 1 data_reg
     assign alu_in_select = (instruction_reg_out[4:0] > 5'd7);
+
+    reg first_time_active = 1'b0; // The CPU's first clock cycle
+    reg call_cycle = 1'b0; // The extra cycle for call
+    reg goto_cycle = 1'b0; // The extra cycle for goto
+    reg retlw_cycle1 = 1'b0;
+    reg retlw_cycle2 = 1'b0;
 
     // negedge trigger, because we want to make sure thing are setup before posedge
     always @ (negedge clk)
@@ -71,10 +77,13 @@ module cpu_controller(clk, rst, reg_address, instruction_reg_out, zero_result, s
             load_instruction_reg <= 1'b1;
             inc_pc <= 1'b1;
 
-            @(posedge clk); // Wait for the next posedge to load ins_reg
+            first_time_active = 1'b1;
+            //@(posedge clk); // Wait for the next posedge to load ins_reg
 
-            initial_ir_load_done <= 1'b1;
+            //initial_ir_load_done <= 1'b1;
         end
+        else if(first_time_active||call_cycle||goto_cycle||retlw_cycle1||retlw_cycle2)
+            ; // Bypass this block if any of that is true
         else
         begin
             casex (instruction_reg_out)
@@ -180,11 +189,11 @@ module cpu_controller(clk, rst, reg_address, instruction_reg_out, zero_result, s
                 load_pc <= 1'b1;
                 load_stack <= 1'b1;
 
-                @(negedge clk); // after one cycle
+                //@(negedge clk); // after one cycle
 
-                load_pc <= 1'b0;
-                load_stack <= 1'b0;
-                inc_stack <= 1'b1;
+                //load_pc <= 1'b0;
+                //load_stack <= 1'b0;
+                //inc_stack <= 1'b1;
             end
             `CLRWDT  :
             begin
@@ -195,9 +204,9 @@ module cpu_controller(clk, rst, reg_address, instruction_reg_out, zero_result, s
                 pc_mux_select <= 2'd2; // load from instruction_reg
                 load_pc <= 1'b1;
 
-                @(negedge clk); // after one cycle
+                //@(negedge clk); // after one cycle
 
-                load_pc <= 1'b0;
+                //load_pc <= 1'b0;
             end
             `IORLW   :
             begin
@@ -215,16 +224,16 @@ module cpu_controller(clk, rst, reg_address, instruction_reg_out, zero_result, s
             begin
                 dec_stack <= 1'b1;
 
-                @(negedge clk); // after one cycle
+                //@(negedge clk); // after one cycle
 
-                dec_stack <= 1'b0;
-                pc_mux_select <= 2'b0;
-                load_pc <= 1'b1;
+                //dec_stack <= 1'b0;
+                //pc_mux_select <= 2'b0;
+                //load_pc <= 1'b1;
 
-                @(negedge clk); // after one cycle
+                //@(negedge clk); // after one cycle
 
-                load_pc <= 1'b0;
-                store_alu_w <= 1'b1;
+                //load_pc <= 1'b0;
+                //store_alu_w <= 1'b1;
             end
             `SLEEP   :
             begin
@@ -249,7 +258,46 @@ module cpu_controller(clk, rst, reg_address, instruction_reg_out, zero_result, s
             endcase
             load_instruction_reg <= 1'b1;
             inc_pc <=1'b1;
-            @(posedge clk);
+            //@(posedge clk);
+        end
+    end
+
+    always @ (posedge clk)
+    begin
+        if (first_time_active)
+        begin
+             initial_ir_load_done <= 1'b1;
+             first_time_active <= 1'b0;
+        end
+    end
+
+    always @ (negedge clk)
+    begin
+        if (call_cycle)
+        begin
+            load_pc <= 1'b0;
+            load_stack <= 1'b0;
+            inc_stack <= 1'b1;
+            call_cycle <= 1'b0;
+        end
+        if (goto_cycle)
+        begin
+            load_pc <= 1'b0;
+            goto_cycle <= 1'b0;
+        end
+        if (retlw_cycle1)
+        begin
+            dec_stack <= 1'b0;
+            pc_mux_select <= 2'b0;
+            load_pc <= 1'b1;
+            retlw_cycle2 <= 1'b1;
+            retlw_cycle1 <= 1'b0;
+        end
+        if (retlw_cycle2)
+        begin
+            load_pc <= 1'b0;
+            store_alu_w <= 1'b1;
+            retlw_cycle2 <= 1'b0;
         end
     end
 
