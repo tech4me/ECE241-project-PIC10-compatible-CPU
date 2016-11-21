@@ -4,6 +4,7 @@
 
 module cpu_status_reg(clk, rst, alu_to_status, status_bus, load_status_reg, status_c_load, status_dc_load, status_z_load, status_carry_bit, status_reg_out);
     `include "definition.vh"
+
     input clk;
     input rst;
     input [7:0]alu_to_status;

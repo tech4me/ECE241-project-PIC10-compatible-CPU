@@ -4,6 +4,7 @@
 
 module cpu_alu(alu_op_in, alu_in_w, alu_in_mux, status_carry_in, alu_out, status_c_load, status_dc_load, status_z_load, alu_status_out);
     `include "definition.vh"
+
     input [11:0]alu_op_in;
     input [7:0]alu_in_w;
     input [7:0]alu_in_mux;

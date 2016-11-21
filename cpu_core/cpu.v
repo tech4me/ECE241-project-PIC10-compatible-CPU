@@ -3,26 +3,23 @@
 // This file contains the core of the cpu
     
 module cpu(clk, rst, GPIO0, GPIO1, GPIO2);
-    `include "cpu_controller.v"
-    `include "cpu_datapath.v"
-    `include "cpu_program_memory.v"
 
     input clk;
     input rst;
 
-    inout GPIO0;
-    inout GPIO1;
-    inout GPIO2;
+    inout [7:0]GPIO0;
+    inout [7:0]GPIO1;
+    inout [7:0]GPIO2;
 
-    wire reg_address;
-    wire instruction_reg_out;
+    wire [4:0]reg_address;
+    wire [11:0]instruction_reg_out;
     wire zero_result;
     wire store_alu_w;
     wire alu_in_select;
     wire load_status_reg;
     wire skip_next_instruction;
     wire load_instruction_reg;
-    wire pc_mux_select;
+    wire [1:0]pc_mux_select;
     wire load_pc;
     wire inc_pc;
     wire inc_stack;
@@ -38,8 +35,8 @@ module cpu(clk, rst, GPIO0, GPIO1, GPIO2);
     wire load_gpio1;
     wire load_gpio2;
 
-    wire program_bus;
-    wire program_address;
+    wire [11:0]program_bus;
+    wire [8:0]program_address;
 
     cpu_controller controller
     (

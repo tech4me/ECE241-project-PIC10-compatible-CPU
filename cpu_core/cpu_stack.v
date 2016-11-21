@@ -4,6 +4,7 @@
 
 module cpu_stack(clk, rst, load_stack, dec_stack_ptr, inc_stack_ptr, pc_to_stack, stack_out);
     `include "definition.vh"
+
     input clk;
     input rst;
     input load_stack;

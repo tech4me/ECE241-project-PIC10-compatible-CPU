@@ -3,6 +3,7 @@
 // This file contains the W accumulator of CPU which saves the result coming out of ALU and have bus to send back to ALU
 
 module cpu_w_accumulator(clk, rst, load_w, alu_to_w, w_accumulator_out);
+
     input clk;
     input rst;
     input load_w;

@@ -3,6 +3,7 @@
 // This file contains the data registers, there are 24 in total
 
 module cpu_data_reg(clk, rst, alu_out_to_reg, reg_address, write_enable, data_reg_out);
+
     input clk;
     input rst;
     input [7:0]alu_out_to_reg;

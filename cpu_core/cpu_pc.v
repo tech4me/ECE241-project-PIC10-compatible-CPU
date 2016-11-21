@@ -3,6 +3,7 @@
 // This file contains the program counter (that can go from 0 to 511)
 
 module cpu_pc(clk, rst, pc_inc, load_pc, pc_input_from_mux, pc_out);
+
     input clk;
     input rst;
     input pc_inc;

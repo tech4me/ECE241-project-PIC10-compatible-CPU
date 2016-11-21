@@ -3,9 +3,7 @@
 // This file contains the ALU(Arithmetic logic Unit) datapath
 
 module cpu_alu_datapath(clk, rst, instruction_in, sfr_in, data_reg_in, carry_bit_in, store_alu_w, alu_in_select, alu_to_reg, status_bus_out, status_c_load, status_dc_load, status_z_load);
-    `include "cpu_alu.v"
-    `include "cpu_alu_input_mux.v"
-    `include "cpu_w_accumulator.v"
+
     input clk;
     input rst;
     input [11:0]instruction_in;

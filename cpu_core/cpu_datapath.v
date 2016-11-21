@@ -4,12 +4,6 @@
 
 module cpu_datapath(clk, rst, store_alu_w, alu_in_select, load_status_reg, skip_next_instruction, load_instruction_reg, pc_mux_select, load_pc, inc_pc, inc_stack, dec_stack, load_stack, load_fsr, reg_address_mux_select, load_ram, program_bus, load_tris0, load_tris1, load_tris2, load_gpio0, load_gpio1, load_gpio2, gpio0_bus, gpio1_bus, gpio2_bus, reg_address, instruction_reg_out, program_address, zero_result);
     `include "definition.vh"
-    `include "cpu_alu_datapath.v"
-    `include "cpu_status_reg.v"
-    `include "cpu_sfr_mux.v"
-    `include "cpu_instruction_datapath.v"
-    `include "cpu_fsr_datapath.v"
-    `include "cpu_gpio.v"
 
     input clk;
     input rst;
@@ -110,12 +104,12 @@ module cpu_datapath(clk, rst, store_alu_w, alu_in_select, load_status_reg, skip_
     );
 
     // The sfr_mux module
-    reg [7:0]null = 8'b0;
+    reg [7:0]null_input = 8'b0;
     cpu_sfr_mux sfr_mux
     (
         .sfr_mux_select(wire_reg_address[2:0]),
-        .indf_reg(null),
-        .tmr0_reg(null),
+        .indf_reg(null_input),
+        .tmr0_reg(null_input),
         .pc_low_reg(wire_program_address[7:0]),
         .status_reg(wire_status_reg),
         .fsr_reg(wire_fsr_reg),

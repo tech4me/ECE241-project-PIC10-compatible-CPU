@@ -48,7 +48,6 @@ module cpu_controller(clk, rst, reg_address, instruction_reg_out, zero_result, s
     always @ (negedge clk)
     begin
         store_alu_w <= 0;
-        alu_in_select <= 0;
         load_status_reg <= 0;
         skip_next_instruction <= 0; 
         load_instruction_reg <= 0;

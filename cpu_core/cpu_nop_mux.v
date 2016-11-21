@@ -4,6 +4,7 @@
 
 module cpu_nop_mux(nop_insert, program_bus_in, program_bus_out);
     `include "definition.vh"
+
     input nop_insert;
     input [11:0]program_bus_in;
     output [11:0]program_bus_out;
