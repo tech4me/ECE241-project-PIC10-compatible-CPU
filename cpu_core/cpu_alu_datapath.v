@@ -2,7 +2,7 @@
 // Date created: November 14 2016
 // This file contains the ALU(Arithmetic logic Unit) datapath
 
-module cpu_alu_datapath(clk, rst, instruction_in, sfr_in, data_reg_in, carry_bit_in, store_alu_w, alu_in_select, alu_to_reg, status_bus_out, status_c_load, status_dc_load, status_z_load);
+module cpu_alu_datapath(clk, rst, instruction_in, sfr_in, data_reg_in, carry_bit_in, store_alu_w, alu_in_select, alu_to_reg, status_bus_out, status_c_load, status_dc_load, status_z_load, w_reg_out);
 
     input clk;
     input rst;
@@ -17,6 +17,7 @@ module cpu_alu_datapath(clk, rst, instruction_in, sfr_in, data_reg_in, carry_bit
     output status_c_load;
     output status_dc_load;
     output status_z_load;
+    output [7:0]w_reg_out;
 
     wire [7:0]wire_w_accumulator;
     wire [7:0]wire_mux_to_alu;
@@ -55,4 +56,5 @@ module cpu_alu_datapath(clk, rst, instruction_in, sfr_in, data_reg_in, carry_bit
         .w_accumulator_out(wire_w_accumulator)
     );
     assign alu_to_reg = wire_alu_output; // The ouput of ALU
+    assign w_reg_out = wire_w_accumulator;
 endmodule

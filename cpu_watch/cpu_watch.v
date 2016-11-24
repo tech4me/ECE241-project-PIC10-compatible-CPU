@@ -2,7 +2,7 @@
 // Date created: November 21 2016
 // This file contains functionalitys that helps to monitor all the registers in the cpu
 
-module cpu_watch(pc, pcl, status, fsr, gpio0, gpio1, gpio2, all_reg_out, SW, LEDR, HEX0, HEX1);
+module cpu_watch(pc, pcl, status, fsr, gpio0, gpio1, gpio2, w_reg_out, all_reg_out, SW, LEDR, HEX0, HEX1, HEX2, HEX3);
 
     input [8:0]pc;
     input [7:0]pcl;
@@ -11,12 +11,15 @@ module cpu_watch(pc, pcl, status, fsr, gpio0, gpio1, gpio2, all_reg_out, SW, LED
     input [7:0]gpio0;
     input [7:0]gpio1;
     input [7:0]gpio2;
+    input [7:0]w_reg_out;
     input [191:0]all_reg_out;
 
     input [4:0]SW;
     output [9:0]LEDR;
     output [6:0]HEX0;
     output [6:0]HEX1;
+    output [6:0]HEX2;
+    output [6:0]HEX3;
 
     reg [7:0]reg_out = 8'b0;
 
@@ -70,6 +73,18 @@ module cpu_watch(pc, pcl, status, fsr, gpio0, gpio1, gpio2, all_reg_out, SW, LED
     (
         .hex_digit(reg_out[7:4]), 
         .segments(HEX1)
+    );
+
+    hex_decoder H2
+    (
+        .hex_digit(w_reg_out[3:0]), 
+        .segments(HEX2)
+    );
+
+    hex_decoder H3
+    (
+        .hex_digit(w_reg_out[7:4]), 
+        .segments(HEX3)
     );
 
 endmodule

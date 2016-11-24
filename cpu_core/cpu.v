@@ -2,7 +2,7 @@
 // Date created: November 19 2016
 // This file contains the core of the cpu
     
-module cpu(clk, rst, GPIO0, GPIO1, GPIO2, SW, LEDR, HEX0, HEX1);
+module cpu(clk, rst, GPIO0, GPIO1, GPIO2, SW, LEDR, HEX0, HEX1, HEX2, HEX3);
 
     input clk;
     input rst;
@@ -15,6 +15,8 @@ module cpu(clk, rst, GPIO0, GPIO1, GPIO2, SW, LEDR, HEX0, HEX1);
     output [9:0]LEDR;
     output [6:0]HEX0;
     output [6:0]HEX1;
+    output [6:0]HEX2;
+    output [6:0]HEX3;
 
     wire [4:0]reg_address;
     wire [11:0]instruction_reg_out;
@@ -62,7 +64,7 @@ module cpu(clk, rst, GPIO0, GPIO1, GPIO2, SW, LEDR, HEX0, HEX1);
         .dec_stack(dec_stack),
         .load_stack(load_stack),
         .load_fsr(load_fsr),
-        .reg_address_mux_select(),
+        .reg_address_mux_select(reg_address_mux_select),
         .load_ram(load_ram),
         .load_tris0(load_tris0),
         .load_tris1(load_tris1),
@@ -89,7 +91,7 @@ module cpu(clk, rst, GPIO0, GPIO1, GPIO2, SW, LEDR, HEX0, HEX1);
         .dec_stack(dec_stack),
         .load_stack(load_stack),
         .load_fsr(load_fsr),
-        .reg_address_mux_select(),
+        .reg_address_mux_select(reg_address_mux_select),
         .load_ram(load_ram),
         .program_bus(program_bus),
         .load_tris0(load_tris0),
@@ -108,7 +110,9 @@ module cpu(clk, rst, GPIO0, GPIO1, GPIO2, SW, LEDR, HEX0, HEX1);
         .SW(SW),
         .LEDR(LEDR),
         .HEX0(HEX0),
-        .HEX1(HEX1)
+        .HEX1(HEX1),
+        .HEX2(HEX2),
+        .HEX3(HEX3)
     );
 
 

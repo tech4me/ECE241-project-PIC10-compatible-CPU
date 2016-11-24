@@ -2,7 +2,7 @@
 // Date created: November 17 2016
 // This file contains the datapath for the core of the cpu
 
-module cpu_datapath(clk, rst, store_alu_w, alu_in_select, load_status_reg, skip_next_instruction, load_instruction_reg, pc_mux_select, load_pc, inc_pc, inc_stack, dec_stack, load_stack, load_fsr, reg_address_mux_select, load_ram, program_bus, load_tris0, load_tris1, load_tris2, load_gpio0, load_gpio1, load_gpio2, gpio0_bus, gpio1_bus, gpio2_bus, reg_address, instruction_reg_out, program_address, zero_result, SW, LEDR, HEX0, HEX1);
+module cpu_datapath(clk, rst, store_alu_w, alu_in_select, load_status_reg, skip_next_instruction, load_instruction_reg, pc_mux_select, load_pc, inc_pc, inc_stack, dec_stack, load_stack, load_fsr, reg_address_mux_select, load_ram, program_bus, load_tris0, load_tris1, load_tris2, load_gpio0, load_gpio1, load_gpio2, gpio0_bus, gpio1_bus, gpio2_bus, reg_address, instruction_reg_out, program_address, zero_result, SW, LEDR, HEX0, HEX1, HEX2, HEX3);
     `include "definition.vh"
 
     input clk;
@@ -43,6 +43,8 @@ module cpu_datapath(clk, rst, store_alu_w, alu_in_select, load_status_reg, skip_
     output [9:0]LEDR;
     output [6:0]HEX0;
     output [6:0]HEX1;
+    output [6:0]HEX2;
+    output [6:0]HEX3;
 
     // alu_datapath wires
     wire [11:0]wire_instruction_bus;
@@ -54,6 +56,7 @@ module cpu_datapath(clk, rst, store_alu_w, alu_in_select, load_status_reg, skip_
     wire wire_status_c_load;
     wire wire_status_dc_load;
     wire wire_status_z_load;
+    wire [7:0]wire_w_reg_out;
 
     // status_reg wires
     wire [7:0]wire_status_reg;
@@ -93,7 +96,8 @@ module cpu_datapath(clk, rst, store_alu_w, alu_in_select, load_status_reg, skip_
         .status_bus_out(wire_status_bus),
         .status_c_load(wire_status_c_load),
         .status_dc_load(wire_status_dc_load),
-        .status_z_load(wire_status_z_load)
+        .status_z_load(wire_status_z_load),
+        .w_reg_out(wire_w_reg_out)
     );
 
     // The status_reg module
@@ -209,9 +213,12 @@ module cpu_datapath(clk, rst, store_alu_w, alu_in_select, load_status_reg, skip_
         .gpio1(gpio1_input),
         .gpio2(gpio2_input),
         .all_reg_out(wire_all_reg_out),
+        .w_reg_out(wire_w_reg_out),
         .SW(SW),
         .LEDR(LEDR),
         .HEX0(HEX0),
-        .HEX1(HEX1)
+        .HEX1(HEX1),
+        .HEX2(HEX2),
+        .HEX3(HEX3)
     );
 endmodule

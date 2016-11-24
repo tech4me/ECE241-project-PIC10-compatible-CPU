@@ -223,6 +223,7 @@ module cpu_alu(alu_op_in, alu_in_w, alu_in_mux, status_carry_in, alu_out, status
                 alu_status_out[`STATUS_Z] = (alu_out == 12'b0);
                 status_z_load = 1'b1;
             end
+            default: ;//Do nothing
         endcase
     end
 endmodule
