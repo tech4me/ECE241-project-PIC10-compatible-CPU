@@ -30,7 +30,8 @@ _inst.vhd
 .html
 .jdi
 .jpg
-#.mif Needed for the program to load
+.mif
+.hex
 .pin
 .pof
 .ptf.
