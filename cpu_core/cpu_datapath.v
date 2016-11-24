@@ -2,7 +2,7 @@
 // Date created: November 17 2016
 // This file contains the datapath for the core of the cpu
 
-module cpu_datapath(clk, rst, store_alu_w, alu_in_select, load_status_reg, skip_next_instruction, load_instruction_reg, pc_mux_select, load_pc, inc_pc, inc_stack, dec_stack, load_stack, load_fsr, reg_address_mux_select, load_ram, program_bus, load_tris0, load_tris1, load_tris2, load_gpio0, load_gpio1, load_gpio2, gpio0_bus, gpio1_bus, gpio2_bus, reg_address, instruction_reg_out, program_address, zero_result);
+module cpu_datapath(clk, rst, store_alu_w, alu_in_select, load_status_reg, skip_next_instruction, load_instruction_reg, pc_mux_select, load_pc, inc_pc, inc_stack, dec_stack, load_stack, load_fsr, reg_address_mux_select, load_ram, program_bus, load_tris0, load_tris1, load_tris2, load_gpio0, load_gpio1, load_gpio2, gpio0_bus, gpio1_bus, gpio2_bus, reg_address, instruction_reg_out, program_address, zero_result, SW, LEDR, HEX0, HEX1);
     `include "definition.vh"
 
     input clk;
@@ -39,6 +39,11 @@ module cpu_datapath(clk, rst, store_alu_w, alu_in_select, load_status_reg, skip_
     output [8:0]program_address;
     output zero_result;
 
+    input [4:0]SW;
+    output [9:0]LEDR;
+    output [6:0]HEX0;
+    output [6:0]HEX1;
+
     // alu_datapath wires
     wire [11:0]wire_instruction_bus;
     wire [7:0]wire_sfr_bus;
@@ -59,6 +64,9 @@ module cpu_datapath(clk, rst, store_alu_w, alu_in_select, load_status_reg, skip_
 
     // instruction_datapath wires
     wire [8:0]wire_program_address;
+
+    // fsr_datapath wires
+    wire [191:0]wire_all_reg_out;
 
     // GPIO wires
     wire [7:0]gpio0_input;
@@ -150,7 +158,8 @@ module cpu_datapath(clk, rst, store_alu_w, alu_in_select, load_status_reg, skip_
         .alu_output(wire_alu_bus),
         .reg_address_out(wire_reg_address),
         .fsr_reg_out(wire_fsr_reg),
-        .ram_out(wire_data_reg)
+        .ram_out(wire_data_reg),
+        .all_reg_out(wire_all_reg_out)
     );
 
     // GPIO0
@@ -187,5 +196,22 @@ module cpu_datapath(clk, rst, store_alu_w, alu_in_select, load_status_reg, skip_
         .load_gpio_reg(load_gpio2),
         .gpio_bus(gpio2_bus),
         .gpio_input(gpio2_input)
+    );
+
+    // Monitor CPU's register
+    cpu_watch watch
+    (
+        .pc(wire_program_address),
+        .pcl(wire_program_address[7:0]),
+        .status(wire_status_reg),
+        .fsr(wire_fsr_reg),
+        .gpio0(gpio0_input),
+        .gpio1(gpio1_input),
+        .gpio2(gpio2_input),
+        .all_reg_out(wire_all_reg_out),
+        .SW(SW),
+        .LEDR(LEDR),
+        .HEX0(HEX0),
+        .HEX1(HEX1)
     );
 endmodule

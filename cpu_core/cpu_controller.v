@@ -44,7 +44,6 @@ module cpu_controller(clk, rst, reg_address, instruction_reg_out, zero_result, s
     // select = 1 data_reg
     assign alu_in_select = (instruction_reg_out[4:0] > 5'd7);
 
-    reg first_time_active = 1'b0; // The CPU's first clock cycle
     reg call_cycle = 1'b0; // The extra cycle for call
     reg goto_cycle = 1'b0; // The extra cycle for goto
     reg retlw_cycle1 = 1'b0;
@@ -72,18 +71,50 @@ module cpu_controller(clk, rst, reg_address, instruction_reg_out, zero_result, s
         load_gpio1 <= 0;
         load_gpio2 <= 0;
 
-        if ((rst == 1'b0) && (initial_ir_load_done == 1'b0))
-        begin
-            load_instruction_reg <= 1'b1;
-            inc_pc <= 1'b1;
+        //if ((rst == 1'b0) && (initial_ir_load_done == 1'b0))
+        //begin
+        //    load_instruction_reg <= 1'b1;
+        //    inc_pc <= 1'b1;
 
-            first_time_active = 1'b1;
+        //    first_time_active = 1'b1;
             //@(posedge clk); // Wait for the next posedge to load ins_reg
 
             //initial_ir_load_done <= 1'b1;
+        //end
+        if(call_cycle||goto_cycle||retlw_cycle1||retlw_cycle2)
+        begin
+            //if (first_time_active)
+            //begin
+            //    initial_ir_load_done <= 1'b1;
+            //    first_time_active <= 1'b0;
+            //end
+            if (call_cycle)
+            begin
+                load_pc <= 1'b0;
+                load_stack <= 1'b0;
+                inc_stack <= 1'b1;
+                call_cycle <= 1'b0;
+            end
+            if (goto_cycle)
+            begin
+                load_pc <= 1'b0;
+                goto_cycle <= 1'b0;
+            end
+            if (retlw_cycle1)
+            begin
+                dec_stack <= 1'b0;
+                pc_mux_select <= 2'b0;
+                load_pc <= 1'b1;
+                retlw_cycle2 <= 1'b1;
+                retlw_cycle1 <= 1'b0;
+            end
+            if (retlw_cycle2)
+            begin
+                load_pc <= 1'b0;
+                store_alu_w <= 1'b1;
+                retlw_cycle2 <= 1'b0;
+            end
         end
-        else if(first_time_active||call_cycle||goto_cycle||retlw_cycle1||retlw_cycle2)
-            ; // Bypass this block if any of that is true
         else
         begin
             casex (instruction_reg_out)
@@ -241,15 +272,15 @@ module cpu_controller(clk, rst, reg_address, instruction_reg_out, zero_result, s
             end
             `TRIS0   :
             begin
-                load_tris0 = 1'b1;
+                load_tris0 <= 1'b1;
             end
             `TRIS1   :
             begin
-                load_tris1 = 1'b1;
+                load_tris1 <= 1'b1;
             end
             `TRIS2   :
             begin
-                load_tris2 = 1'b1;
+                load_tris2 <= 1'b1;
             end
             `XORLW   :
             begin
@@ -259,45 +290,6 @@ module cpu_controller(clk, rst, reg_address, instruction_reg_out, zero_result, s
             load_instruction_reg <= 1'b1;
             inc_pc <=1'b1;
             //@(posedge clk);
-        end
-    end
-
-    always @ (posedge clk)
-    begin
-        if (first_time_active)
-        begin
-             initial_ir_load_done <= 1'b1;
-             first_time_active <= 1'b0;
-        end
-    end
-
-    always @ (negedge clk)
-    begin
-        if (call_cycle)
-        begin
-            load_pc <= 1'b0;
-            load_stack <= 1'b0;
-            inc_stack <= 1'b1;
-            call_cycle <= 1'b0;
-        end
-        if (goto_cycle)
-        begin
-            load_pc <= 1'b0;
-            goto_cycle <= 1'b0;
-        end
-        if (retlw_cycle1)
-        begin
-            dec_stack <= 1'b0;
-            pc_mux_select <= 2'b0;
-            load_pc <= 1'b1;
-            retlw_cycle2 <= 1'b1;
-            retlw_cycle1 <= 1'b0;
-        end
-        if (retlw_cycle2)
-        begin
-            load_pc <= 1'b0;
-            store_alu_w <= 1'b1;
-            retlw_cycle2 <= 1'b0;
         end
     end
 

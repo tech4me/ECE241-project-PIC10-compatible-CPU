@@ -2,7 +2,7 @@
 // Date created: November 19 2016
 // This file contains the core of the cpu
     
-module cpu(clk, rst, GPIO0, GPIO1, GPIO2);
+module cpu(clk, rst, GPIO0, GPIO1, GPIO2, SW, LEDR, HEX0, HEX1);
 
     input clk;
     input rst;
@@ -10,6 +10,11 @@ module cpu(clk, rst, GPIO0, GPIO1, GPIO2);
     inout [7:0]GPIO0;
     inout [7:0]GPIO1;
     inout [7:0]GPIO2;
+
+    input [9:0]SW;
+    output [9:0]LEDR;
+    output [6:0]HEX0;
+    output [6:0]HEX1;
 
     wire [4:0]reg_address;
     wire [11:0]instruction_reg_out;
@@ -99,7 +104,11 @@ module cpu(clk, rst, GPIO0, GPIO1, GPIO2);
         .reg_address(reg_address),
         .instruction_reg_out(instruction_reg_out),
         .program_address(program_address),
-        .zero_result(zero_result)
+        .zero_result(zero_result),
+        .SW(SW),
+        .LEDR(LEDR),
+        .HEX0(HEX0),
+        .HEX1(HEX1)
     );
 
 

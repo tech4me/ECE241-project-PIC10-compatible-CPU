@@ -2,7 +2,7 @@
 // Date created: November 14 2016
 // This file contains the data registers, there are 24 in total
 
-module cpu_data_reg(clk, rst, alu_out_to_reg, reg_address, write_enable, data_reg_out);
+module cpu_data_reg(clk, rst, alu_out_to_reg, reg_address, write_enable, data_reg_out, all_reg_out);
 
     input clk;
     input rst;
@@ -10,6 +10,9 @@ module cpu_data_reg(clk, rst, alu_out_to_reg, reg_address, write_enable, data_re
     input [4:0]reg_address;
     input write_enable;
     output [7:0]data_reg_out;
+    output [191:0]all_reg_out;
+
+    assign all_reg_out = {data_reg[23], data_reg[22], data_reg[21], data_reg[20], data_reg[19], data_reg[18], data_reg[17], data_reg[16], data_reg[15], data_reg[14], data_reg[13], data_reg[12], data_reg[11], data_reg[10], data_reg[9], data_reg[8], data_reg[7], data_reg[6], data_reg[5], data_reg[4], data_reg[3], data_reg[2], data_reg[1], data_reg[0]};
 
     reg [7:0]data_reg[0:23];
 

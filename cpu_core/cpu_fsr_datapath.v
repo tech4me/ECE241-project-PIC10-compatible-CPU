@@ -2,7 +2,7 @@
 // Date created: November 17 2016
 // This file contains the datapath for the file select register , general purpose registers(data_reg) and related circuit
 
-module cpu_fsr_datapath(clk, rst, load_fsr, reg_address_mux_select, instruction_reg_output, load_ram, alu_output, reg_address_out, fsr_reg_out, ram_out);
+module cpu_fsr_datapath(clk, rst, load_fsr, reg_address_mux_select, instruction_reg_output, load_ram, alu_output, reg_address_out, fsr_reg_out, ram_out, all_reg_out);
 
     input clk;
     input rst;
@@ -14,6 +14,7 @@ module cpu_fsr_datapath(clk, rst, load_fsr, reg_address_mux_select, instruction_
     output [4:0]reg_address_out;
     output [7:0]fsr_reg_out;
     output [7:0]ram_out;
+    output [191:0]all_reg_out;
 
     wire [7:0]wire_fsr_to_address_mux;
     wire [4:0]wire_address_mux_to_data_reg;
@@ -45,7 +46,8 @@ module cpu_fsr_datapath(clk, rst, load_fsr, reg_address_mux_select, instruction_
         .alu_out_to_reg(alu_output),
         .reg_address(wire_address_mux_to_data_reg),
         .write_enable(load_ram),
-        .data_reg_out(ram_out)
+        .data_reg_out(ram_out),
+        .all_reg_out(all_reg_out)
     );
 
     assign fsr_reg_out = wire_fsr_to_address_mux;
