@@ -117,18 +117,6 @@ module cpu(clk, rst, GPIO0, GPIO1, GPIO2, SW, LEDR, HEX0, HEX1, HEX2, HEX3, HEX4
         .HEX4(HEX4)
     );
 
-
-
-    // The program_memory module
-    //cpu_program_memory program_memory
-    //(
-    //    .address(program_address),
-    //    .clock(clk),
-    //    .data(12'b0), // To be changed later, only one program for now
-    //    .wren(1'b0),
-    //    .q(program_bus)
-    //);
-
     cpu_program_rom program_rom
     (
         .address(program_address),

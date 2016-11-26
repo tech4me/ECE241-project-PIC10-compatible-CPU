@@ -96,15 +96,14 @@ module cpu_controller(clk, rst, reg_address, instruction_reg_out, zero_result, s
             end
             if (retlw_cycle1)
             begin
-                dec_stack <= 1'b0;
-                pc_mux_select <= 2'b0;
                 load_pc <= 1'b1;
                 retlw_cycle2 <= 1'b1;
                 retlw_cycle1 <= 1'b0;
             end
             if (retlw_cycle2)
             begin
-                load_pc <= 1'b0;
+                load_instruction_reg <= 1'b1;
+                inc_pc <=1'b1;
                 store_alu_w <= 1'b1;
                 retlw_cycle2 <= 1'b0;
             end
@@ -216,6 +215,7 @@ module cpu_controller(clk, rst, reg_address, instruction_reg_out, zero_result, s
                 inc_pc <= 1'b0;
                 load_pc <= 1'b1;
                 load_stack <= 1'b1;
+                load_instruction_reg <= 1'b0; // Don't need to load the next instruction
                 call_cycle <= 1'b1;
             end
             `CLRWDT  :
@@ -227,6 +227,7 @@ module cpu_controller(clk, rst, reg_address, instruction_reg_out, zero_result, s
                 pc_mux_select <= 2'd2; // load from instruction_reg
                 inc_pc <= 1'b0;
                 load_pc <= 1'b1;
+                load_instruction_reg <= 1'b0; // Don't need to load the next instruction
                 goto_cycle <= 1'b1;
             end
             `IORLW   :
@@ -244,6 +245,7 @@ module cpu_controller(clk, rst, reg_address, instruction_reg_out, zero_result, s
             `RETLW   :
             begin
                 dec_stack <= 1'b1;
+                load_instruction_reg <= 1'b0; // Don't need to load the next instruction
                 retlw_cycle1 <= 1'b1;
             end
             `SLEEP   :
