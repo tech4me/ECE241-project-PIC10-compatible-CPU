@@ -12,7 +12,7 @@ module toplevel(CLOCK_50, KEY, SW, LEDR, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5);
 
     wire clk;
 
-    assign clk = SW[9] ? (~KEY[1]) : CLOCK_50;
+    assign clk = SW[9] ? (KEY[1]) : CLOCK_50;
 
     cpu cpu_core
     (
@@ -21,12 +21,13 @@ module toplevel(CLOCK_50, KEY, SW, LEDR, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5);
         .GPIO0(),
         .GPIO1(),
         .GPIO2(),
-        .SW(SW[4:0]),
+        .SW(SW),
         .LEDR(LEDR),
         .HEX0(HEX0),
         .HEX1(HEX1),
         .HEX2(HEX2),
-        .HEX3(HEX3)
+        .HEX3(HEX3),
+        .HEX4(HEX4)
     );
 
 endmodule

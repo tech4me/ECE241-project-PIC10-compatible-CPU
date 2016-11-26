@@ -2,7 +2,7 @@
 // Date created: November 21 2016
 // This file contains functionalitys that helps to monitor all the registers in the cpu
 
-module cpu_watch(pc, pcl, status, fsr, gpio0, gpio1, gpio2, w_reg_out, all_reg_out, SW, LEDR, HEX0, HEX1, HEX2, HEX3);
+module cpu_watch(pc, pcl, status, fsr, gpio0, gpio1, gpio2, w_reg_out, instruction_reg, all_reg_out, SW, LEDR, HEX0, HEX1, HEX2, HEX3, HEX4);
 
     input [8:0]pc;
     input [7:0]pcl;
@@ -12,16 +12,19 @@ module cpu_watch(pc, pcl, status, fsr, gpio0, gpio1, gpio2, w_reg_out, all_reg_o
     input [7:0]gpio1;
     input [7:0]gpio2;
     input [7:0]w_reg_out;
+    input [11:0]instruction_reg;
     input [191:0]all_reg_out;
 
-    input [4:0]SW;
+    input [5:0]SW;
     output [9:0]LEDR;
     output [6:0]HEX0;
     output [6:0]HEX1;
     output [6:0]HEX2;
     output [6:0]HEX3;
+    output [6:0]HEX4;
 
     reg [7:0]reg_out = 8'b0;
+    wire [7:0]reg_display;
 
     always @ (*)
     begin
@@ -63,28 +66,36 @@ module cpu_watch(pc, pcl, status, fsr, gpio0, gpio1, gpio2, w_reg_out, all_reg_o
 
     assign LEDR[8:0] = pc;
 
+    assign reg_display = SW[5] ? w_reg_out : reg_out;
+
     hex_decoder H0
     (
-        .hex_digit(reg_out[3:0]), 
+        .hex_digit(reg_display[3:0]), 
         .segments(HEX0)
     );
 
     hex_decoder H1
     (
-        .hex_digit(reg_out[7:4]), 
+        .hex_digit(reg_display[7:4]), 
         .segments(HEX1)
     );
 
     hex_decoder H2
     (
-        .hex_digit(w_reg_out[3:0]), 
+        .hex_digit(instruction_reg[3:0]), 
         .segments(HEX2)
     );
 
     hex_decoder H3
     (
-        .hex_digit(w_reg_out[7:4]), 
+        .hex_digit(instruction_reg[7:4]), 
         .segments(HEX3)
+    );
+
+    hex_decoder H4
+    (
+        .hex_digit(instruction_reg[11:8]), 
+        .segments(HEX4)
     );
 
 endmodule

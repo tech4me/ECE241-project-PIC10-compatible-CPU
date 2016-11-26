@@ -71,17 +71,15 @@ module cpu_controller(clk, rst, reg_address, instruction_reg_out, zero_result, s
         load_gpio1 <= 0;
         load_gpio2 <= 0;
 
-        if (rst && (initial_ir_lo00ad_done == 1'b1))
-        begin
+        if (rst)
             initial_ir_load_done = 1'b0;
-        end
-        else if ((rst == 1'b0) && (initial_ir_load_done == 1'b0))
+        else if ((!rst) && (!initial_ir_load_done))
         begin
             load_instruction_reg <= 1'b1;
             inc_pc <= 1'b1;
             initial_ir_load_done <= 1'b1;
         end
-        else if(call_cycle||goto_cycle||retlw_cycle1||retlw_cycle2)
+        else if(call_cycle|goto_cycle|retlw_cycle1|retlw_cycle2)
         begin
             if (call_cycle)
             begin

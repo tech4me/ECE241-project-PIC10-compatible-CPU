@@ -2,7 +2,7 @@
 // Date created: November 19 2016
 // This file contains the core of the cpu
     
-module cpu(clk, rst, GPIO0, GPIO1, GPIO2, SW, LEDR, HEX0, HEX1, HEX2, HEX3);
+module cpu(clk, rst, GPIO0, GPIO1, GPIO2, SW, LEDR, HEX0, HEX1, HEX2, HEX3, HEX4);
 
     input clk;
     input rst;
@@ -17,6 +17,7 @@ module cpu(clk, rst, GPIO0, GPIO1, GPIO2, SW, LEDR, HEX0, HEX1, HEX2, HEX3);
     output [6:0]HEX1;
     output [6:0]HEX2;
     output [6:0]HEX3;
+    output [6:0]HEX4;
 
     wire [4:0]reg_address;
     wire [11:0]instruction_reg_out;
@@ -107,23 +108,31 @@ module cpu(clk, rst, GPIO0, GPIO1, GPIO2, SW, LEDR, HEX0, HEX1, HEX2, HEX3);
         .instruction_reg_out(instruction_reg_out),
         .program_address(program_address),
         .zero_result(zero_result),
-        .SW(SW),
+        .SW(SW[5:0]),
         .LEDR(LEDR),
         .HEX0(HEX0),
         .HEX1(HEX1),
         .HEX2(HEX2),
-        .HEX3(HEX3)
+        .HEX3(HEX3),
+        .HEX4(HEX4)
     );
 
 
 
     // The program_memory module
-    cpu_program_memory program_memory
+    //cpu_program_memory program_memory
+    //(
+    //    .address(program_address),
+    //    .clock(clk),
+    //    .data(12'b0), // To be changed later, only one program for now
+    //    .wren(1'b0),
+    //    .q(program_bus)
+    //);
+
+    cpu_program_rom program_rom
     (
         .address(program_address),
-        .clock(clk),
-        .data(12'b0), // To be changed later, only one program for now
-        .wren(1'b0),
+        .clock(~clk),
         .q(program_bus)
     );
 
