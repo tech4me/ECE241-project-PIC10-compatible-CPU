@@ -40,13 +40,13 @@ module vga_controller(	vga_clock, resetn, pixel_colour, memory_address,
 	 * as change the frequency of the clock driving the monitor (VGA_CLK).
 	 */
 	parameter C_VERT_NUM_PIXELS  = 10'd480;
-	parameter C_VERT_SYNC_START  = 10'd493;
-	parameter C_VERT_SYNC_END    = 10'd494; //(C_VERT_SYNC_START + 2 - 1); 
+	parameter C_VERT_SYNC_START  = 10'd490;
+	parameter C_VERT_SYNC_END    = 10'd492;
 	parameter C_VERT_TOTAL_COUNT = 10'd525;
 
 	parameter C_HORZ_NUM_PIXELS  = 10'd640;
-	parameter C_HORZ_SYNC_START  = 10'd659;
-	parameter C_HORZ_SYNC_END    = 10'd754; //(C_HORZ_SYNC_START + 96 - 1); 
+	parameter C_HORZ_SYNC_START  = 10'd656;
+	parameter C_HORZ_SYNC_END    = 10'd752;
 	parameter C_HORZ_TOTAL_COUNT = 10'd800;	
 		
 	/*****************************************************************************/
@@ -121,11 +121,6 @@ module vga_controller(	vga_clock, resetn, pixel_colour, memory_address,
 		begin
 			x = xCounter[9:0];
 			y = yCounter[8:0];
-		end
-		else
-		begin
-			x = xCounter[9:2];
-			y = yCounter[8:2];
 		end
 	end
 	

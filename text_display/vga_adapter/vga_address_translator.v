@@ -12,7 +12,7 @@ module vga_address_translator(x, y, mem_address);
 
 	input [((RESOLUTION == "640x480") ? (9) : (7)):0] x; 
 	input [((RESOLUTION == "640x480") ? (8) : (6)):0] y;	
-	output reg [((RESOLUTION == "640x480") ? (18) : (14)):0] mem_address;
+	output [((RESOLUTION == "640x480") ? (18) : (14)):0] mem_address;
 	
 	/* The basic formula is address = y*WIDTH + x;
 	 * For 320x240 resolution we can write 320 as (256 + 64). Memory address becomes
@@ -22,14 +22,6 @@ module vga_address_translator(x, y, mem_address);
 	 * inputs. By default the use a '+' operator will generate a signed adder.
 	 * Similarly, for 160x120 resolution we write 160 as 128+32.
 	 */
-	wire [18:0] res_320x240 = ({1'b0, y, 9'd0} + {1'b0, y, 7'd0} + {1'b0, x});
-	wire [15:0] res_160x120 = ({1'b0, y, 8'd0} + {1'b0, y, 6'd0} + {1'b0, x});
-	
-	always @(*)
-	begin
-		if (RESOLUTION == "640x480")
-			mem_address = res_320x240;
-		else
-			mem_address = res_160x120[14:0];
-	end
+	wire [18:0] res_640x480 = ({1'b0, y, 9'd0} + {1'b0, y, 7'd0} + {1'b0, x});
+	assign mem_address = res_640x480;
 endmodule

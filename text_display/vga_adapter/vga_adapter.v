@@ -90,7 +90,7 @@ module vga_adapter(
 			VGA_SYNC,
 			VGA_CLK);
  
-	parameter BITS_PER_COLOUR_CHANNEL = 2;
+	parameter BITS_PER_COLOUR_CHANNEL = 1;
 	/* The number of bits per colour channel used to represent the colour of each pixel. A value
 	 * of 1 means that Red, Green and Blue colour channels will use 1 bit each to represent the intensity
 	 * of the respective colour channel. For BITS_PER_COLOUR_CHANNEL=1, the adapter can display 8 colours.
@@ -98,18 +98,18 @@ module vga_adapter(
 	 * limited by the screen resolution and the amount of on-chip memory available on the target device.
 	 */	
 	
-	parameter MONOCHROME = "FALSE";
+	parameter MONOCHROME = "TRUE";
 	/* Set this parameter to "TRUE" if you only wish to use black and white colours. Doing so will reduce
 	 * the amount of memory you will use by a factor of 3. */
 	
-	parameter RESOLUTION = "320x240";
+	parameter RESOLUTION = "640x480";
 	/* Set this parameter to "160x120" or "320x240". It will cause the VGA adapter to draw each dot on
 	 * the screen by using a block of 4x4 pixels ("160x120" resolution) or 2x2 pixels ("320x240" resolution).
 	 * It effectively reduces the screen resolution to an integer fraction of 640x480. It was necessary
 	 * to reduce the resolution for the Video Memory to fit within the on-chip memory limits.
 	 */
 	
-	parameter BACKGROUND_IMAGE = "background.mif";
+	parameter BACKGROUND_IMAGE = "black.mif";
 	/* The initial screen displayed when the circuit is first programmed onto the DE2 board can be
 	 * defined useing an MIF file. The file contains the initial colour for each pixel on the screen
 	 * and is placed in the Video Memory (VideoMemory module) upon programming. Note that resetting the
@@ -130,8 +130,8 @@ module vga_adapter(
 	/* Specify the number of bits required to represent an (X,Y) coordinate on the screen for
 	 * a given resolution.
 	 */
-	input [((RESOLUTION == "320x240") ? (9) : (7)):0] x; 
-	input [((RESOLUTION == "320x240") ? (8) : (6)):0] y;
+	input [((RESOLUTION == "640x480") ? (9) : (7)):0] x; 
+	input [((RESOLUTION == "640x480") ? (8) : (6)):0] y;
 	
 	/* When plot is high then at the next positive edge of the clock the pixel at (x,y) will change to
 	 * a new colour, defined by the value of the colour input.
@@ -153,8 +153,7 @@ module vga_adapter(
 	/* Declare local signals here.                                               */
 	/*****************************************************************************/
 	
-	wire valid_160x120;
-	wire valid_320x240;
+	wire valid_640x480;
 	/* Set to 1 if the specified coordinates are in a valid range for a given resolution.*/
 	
 	wire writeEn;
@@ -166,13 +165,13 @@ module vga_adapter(
 	wire [((MONOCHROME == "TRUE") ? (0) : (BITS_PER_COLOUR_CHANNEL*3-1)):0] to_ctrl_colour;
 	/* Pixel colour read by the VGA controller */
 	
-	wire [((RESOLUTION == "320x240") ? (18) : (14)):0] user_to_video_memory_addr;
+	wire [((RESOLUTION == "640x480") ? (18) : (14)):0] user_to_video_memory_addr;
 	/* This bus specifies the address in memory the user must write
 	 * data to in order for the pixel intended to appear at location (X,Y) to be displayed
 	 * at the correct location on the screen.
 	 */
 	
-	wire [((RESOLUTION == "320x240") ? (18) : (14)):0] controller_to_video_memory_addr;
+	wire [((RESOLUTION == "640x480") ? (18) : (14)):0] controller_to_video_memory_addr;
 	/* This bus specifies the address in memory the vga controller must read data from
 	 * in order to determine the colour of a pixel located at coordinate (X,Y) of the screen.
 	 */
@@ -193,9 +192,8 @@ module vga_adapter(
 		defparam user_input_translator.RESOLUTION = RESOLUTION;
 	/* Convert user coordinates into a memory address. */
 
-	assign valid_160x120 = (({1'b0, x} >= 0) & ({1'b0, x} < 160) & ({1'b0, y} >= 0) & ({1'b0, y} < 120)) & (RESOLUTION == "160x120");
-	assign valid_320x240 = (({1'b0, x} >= 0) & ({1'b0, x} < 640) & ({1'b0, y} >= 0) & ({1'b0, y} < 480)) & (RESOLUTION == "320x240");
-	assign writeEn = (plot) & (valid_160x120 | valid_320x240);
+	assign valid_640x480 = (({1'b0, x} >= 0) & ({1'b0, x} < 640) & ({1'b0, y} >= 0) & ({1'b0, y} < 480)) & (RESOLUTION == "640x480");
+	assign writeEn = (plot) & (valid_640x480);
 	/* Allow the user to plot a pixel if and only if the (X,Y) coordinates supplied are in a valid range. */
 	
 	/* Create video memory. */
@@ -216,10 +214,10 @@ module vga_adapter(
 		VideoMemory.WIDTH_B = ((MONOCHROME == "FALSE") ? (BITS_PER_COLOUR_CHANNEL*3) : 1),
 		VideoMemory.INTENDED_DEVICE_FAMILY = "Cyclone V",
 		VideoMemory.OPERATION_MODE = "DUAL_PORT",
-		VideoMemory.WIDTHAD_A = ((RESOLUTION == "320x240") ? (19) : (15)),
-		VideoMemory.NUMWORDS_A = ((RESOLUTION == "320x240") ? (307200) : (19200)),
-		VideoMemory.WIDTHAD_B = ((RESOLUTION == "320x240") ? (19) : (15)),
-		VideoMemory.NUMWORDS_B = ((RESOLUTION == "320x240") ? (307200) : (19200)),
+		VideoMemory.WIDTHAD_A = ((RESOLUTION == "640x480") ? (19) : (15)),
+		VideoMemory.NUMWORDS_A = ((RESOLUTION == "640x480") ? (307200) : (19200)),
+		VideoMemory.WIDTHAD_B = ((RESOLUTION == "640x480") ? (19) : (15)),
+		VideoMemory.NUMWORDS_B = ((RESOLUTION == "640x480") ? (307200) : (19200)),
 		VideoMemory.OUTDATA_REG_B = "CLOCK1",
 		VideoMemory.ADDRESS_REG_B = "CLOCK1",
 		VideoMemory.CLOCK_ENABLE_INPUT_A = "BYPASS",

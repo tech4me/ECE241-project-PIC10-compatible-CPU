@@ -1,2 +1,0 @@
-http://martin.hinner.info/vga/timing.html
-check for VGA timing in VGA controller
