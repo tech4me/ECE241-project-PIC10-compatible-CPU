@@ -30,8 +30,8 @@ _inst.vhd
 .html
 .jdi
 .jpg
-.mif
-.hex
+#.mif
+#.hex
 .pin
 .pof
 .ptf.

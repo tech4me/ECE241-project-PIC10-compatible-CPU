@@ -13,9 +13,7 @@ module text_display_offset_counter(clk, rst, display_char, done_char, c_x, c_y);
     always @ (posedge clk)
     begin
         if (rst)
-        begin
             c_x <= 3'b0;
-        end
         else if (c_x == 3'd7)
             c_x <= 3'b0;
         else if (display_char)
@@ -25,15 +23,13 @@ module text_display_offset_counter(clk, rst, display_char, done_char, c_x, c_y);
     always @ (posedge clk)
     begin
         if (rst)
-        begin
             c_y <= 4'b0;
-        end
-        else if (c_y == 4'd15)
+        else if ((c_y == 4'd15) && (c_x == 3'd7))
             c_y <= 4'b0;
         else if (display_char && (c_x == 3'd7))
             c_y <= c_y + 1;
     end
 
-    assign done_char = (display_char&&(c_x == 3'd7)&&(c_y == 4'd15))
+    assign done_char = (display_char&&(c_x == 3'd7)&&(c_y == 4'd15));
 
 endmodule
