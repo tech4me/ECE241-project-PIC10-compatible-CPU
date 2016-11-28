@@ -50,5 +50,5 @@ module cpu_data_reg(clk, rst, alu_out_to_reg, reg_address, write_enable, data_re
             data_reg[reg_address - 8] <= alu_out_to_reg;
         end
     end
-    assign data_reg_out = (reg_address > 5'd7 ) ? data_reg[reg_address - 8] : 8'b0; // Output 
+    assign data_reg_out = (reg_address >= 5'd8) ? data_reg[reg_address - 8] : 8'b0; // Output 
 endmodule

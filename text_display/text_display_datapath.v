@@ -31,7 +31,6 @@ module text_display_datapath(clk, rst, data, rdreq, wrreq, load_buff_reg, inc_cu
 
     wire [6:0]fifo_out;
     wire [6:0]buff_reg_out;
-    //wire [11:0]cursor_out;
     wire [6:0]cursor_x;
     wire [4:0]cursor_y;
     wire [2:0]c_x;
@@ -57,7 +56,7 @@ module text_display_datapath(clk, rst, data, rdreq, wrreq, load_buff_reg, inc_cu
     assign x = (cursor_x * 'd8) + c_x;
     assign y = (cursor_y * 'd16) + c_y;
     assign mask_colour = (1 << ((c_y * 'd8) + c_x));
-    assign colour = text_out['d127 - ((c_y * 'd8) + c_x)];//(text_out & mask_colour) >> (((c_y * 'd8) + c_x) - 1);
+    assign colour = text_out['d127 - ((c_y * 'd8) + c_x)];
 
     text_display_FIFO FIFO
     (
@@ -117,15 +116,6 @@ module text_display_datapath(clk, rst, data, rdreq, wrreq, load_buff_reg, inc_cu
         .y(clear_y),
         .colour(clear_colour)
     );
-
-    //text_display_text_reg text_reg
-    //(
-    //    .clk(clk),
-    //    .rst(rst),
-    //    .load_text_reg(),
-    //    .font_rom_out(text_out),
-    //    .text_reg_out()
-    //);
 
     vga_adapter adapter
     (

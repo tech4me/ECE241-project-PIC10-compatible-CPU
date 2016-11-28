@@ -39,7 +39,7 @@ module cpu_datapath(clk, rst, store_alu_w, alu_in_select, load_status_reg, skip_
     output [8:0]program_address;
     output zero_result;
 
-    input [5:0]SW;
+    input [9:0]SW;
     output [9:0]LEDR;
     output [6:0]HEX0;
     output [6:0]HEX1;

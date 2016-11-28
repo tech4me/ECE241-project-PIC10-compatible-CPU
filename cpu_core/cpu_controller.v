@@ -42,7 +42,9 @@ module cpu_controller(clk, rst, reg_address, instruction_reg_out, zero_result, s
     // Select signal for alu input mux
     // select = 0 sfr
     // select = 1 data_reg
-    assign alu_in_select = (instruction_reg_out[4:0] > 5'd7);
+    // !!! Can only indirect access 24 data registers!!!
+    // This might be a structural problem
+    assign alu_in_select = (instruction_reg_out[4:0] > 5'd7) || (instruction_reg_out[4:0] == 5'b0);
 
     reg call_cycle = 1'b0; // The extra cycle for call
     reg goto_cycle = 1'b0; // The extra cycle for goto

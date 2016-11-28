@@ -2,7 +2,7 @@
 // Date created: November 27 2016
 // This file contains the controller for the text_display module
 
-module text_display_controller(clk, rst, fifo_empty, carriage_ascii, clear_screen, done_char, done_clear, rdreq, load_buff_reg, inc_cursor, carriage_cursor, display_char, do_clear, plot, LEDR);
+module text_display_controller(clk, rst, fifo_empty, carriage_ascii, clear_screen, done_char, done_clear, rdreq, load_buff_reg, inc_cursor, carriage_cursor, display_char, do_clear, plot);
     input clk;
     input rst;
     input fifo_empty;
@@ -18,9 +18,6 @@ module text_display_controller(clk, rst, fifo_empty, carriage_ascii, clear_scree
     output reg display_char;
     output reg do_clear;
     output reg plot;
-
-    output [9:0]LEDR;
-    assign LEDR[2:0] = current_state;
 
     localparam  WAIT = 3'd0,
                 RDREQ = 3'd1,

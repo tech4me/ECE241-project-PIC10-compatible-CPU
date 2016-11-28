@@ -2,9 +2,10 @@
 // Date created: November 26 2016
 // This file contains main module for the cpu to acheive text display with VGA
 
-module text_display(VGA_R, VGA_G, VGA_B, VGA_HS, VGA_VS, VGA_BLANK_N, VGA_SYNC_N, VGA_CLK, SW, CLOCK_50, KEY, LEDR);
-    //input clk;
-    //input rst;
+module text_display(clk, rst, GPIO, VGA_R, VGA_G, VGA_B, VGA_HS, VGA_VS, VGA_BLANK_N, VGA_SYNC_N, VGA_CLK);
+    input clk;
+    input rst;
+    input [7:0]GPIO;
 
     output [7:0]VGA_R;
     output [7:0]VGA_G;
@@ -14,14 +15,6 @@ module text_display(VGA_R, VGA_G, VGA_B, VGA_HS, VGA_VS, VGA_BLANK_N, VGA_SYNC_N
     output VGA_BLANK_N;
     output VGA_SYNC_N;
     output VGA_CLK;
-
-    input [7:0]SW;
-    input CLOCK_50;
-    input [0:0]KEY;
-    output [9:0]LEDR;
-
-    wire clk = CLOCK_50;
-    wire rst = ~KEY[0];
 
     wire fifo_empty;
     wire carriage_ascii;
@@ -52,16 +45,15 @@ module text_display(VGA_R, VGA_G, VGA_B, VGA_HS, VGA_VS, VGA_BLANK_N, VGA_SYNC_N
         .display_char(display_char),
         .do_clear(do_clear),
         .plot(plot),
-        .LEDR(LEDR)
     );
 
     text_display_datapath display_datapath
     (
         .clk(clk),
         .rst(rst),
-        .data(SW[6:0]),
+        .data(GPIO[6:0]),
         .rdreq(rdreq),
-        .wrreq(SW[7]),
+        .wrreq(GPIO[7]),
         .load_buff_reg(load_buff_reg),
         .inc_cursor(inc_cursor),
         .carriage_cursor(carriage_cursor),

@@ -15,7 +15,7 @@ module cpu_watch(pc, pcl, status, fsr, gpio0, gpio1, gpio2, w_reg_out, instructi
     input [11:0]instruction_reg;
     input [191:0]all_reg_out;
 
-    input [5:0]SW;
+    input [9:0]SW;
     output [9:0]LEDR;
     output [6:0]HEX0;
     output [6:0]HEX1;

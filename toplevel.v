@@ -1,4 +1,4 @@
-module toplevel(CLOCK_50, KEY, SW, LEDR, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5);
+module toplevel(CLOCK_50, KEY, SW, LEDR, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5, VGA_R, VGA_G, VGA_B, VGA_HS, VGA_VS, VGA_BLANK_N, VGA_SYNC_N, VGA_CLK);
     input CLOCK_50;
     input [3:0]KEY;
     input [9:0]SW;
@@ -9,16 +9,25 @@ module toplevel(CLOCK_50, KEY, SW, LEDR, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5);
     output [6:0]HEX3;
     output [6:0]HEX4;
     output [6:0]HEX5;
+    output [7:0]VGA_R;
+    output [7:0]VGA_G;
+    output [7:0]VGA_B;
+    output VGA_HS;
+    output VGA_VS;
+    output VGA_BLANK_N;
+    output VGA_SYNC_N;
+    output VGA_CLK;
 
-    wire clk;
+    wire cpu_clk;
+    wire [7:0]gpio_to_display;
 
-    assign clk = SW[9] ? (KEY[1]) : CLOCK_50;
+    assign cpu_clk = SW[9] ? (KEY[1]) : CLOCK_50;
 
     cpu cpu_core
     (
-        .clk(clk),
+        .clk(cpu_clk),
         .rst(~KEY[0]),
-        .GPIO0(),
+        .GPIO0(gpio_to_display),
         .GPIO1(),
         .GPIO2(),
         .SW(SW),
@@ -28,6 +37,21 @@ module toplevel(CLOCK_50, KEY, SW, LEDR, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5);
         .HEX2(HEX2),
         .HEX3(HEX3),
         .HEX4(HEX4)
+    );
+
+    text_display display
+    (
+        .clk(CLOCK_50),
+        .rst(~KEY[0]),
+        .GPIO(gpio_to_display),
+        .VGA_R(VGA_R),
+        .VGA_G(VGA_G),
+        .VGA_B(VGA_B),
+        .VGA_HS(VGA_HS),
+        .VGA_VS(VGA_VS),
+        .VGA_BLANK_N(VGA_BLANK_N),
+        .VGA_SYNC_N(VGA_SYNC_N),
+        .VGA_CLK(VGA_CLK)
     );
 
 endmodule

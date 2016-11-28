@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
 	ofstream output;
 	string buf;
 
-	output.open("out_hex.hex", ios::out);
+	output.open("program.hex", ios::out);
 
 	if (!input.good())
 	{
@@ -51,11 +51,11 @@ void line_handle(string buf, ofstream& out)
 	}
 	else
 	{
-		int byte_num = stoi(buf.substr(1, 2), 0, 16);
-		int address = stoi(buf.substr(3, 4), 0, 16);
-		for (int i = 9; i < 9 + byte_num * 2; i = i + 4)
+		unsigned long byte_num = stoul(buf.substr(1, 2), 0, 16);
+		unsigned long address = stoul(buf.substr(3, 4), 0, 16) / 2;
+		for (unsigned int i = 9; i < 9 + byte_num * 2; i = i + 4)
 		{
-			unsigned long sum = 2 + (address + (i - 9) / 4) + stoul(buf.substr(i + 2, 2), 0, 16) + stoul(buf.substr(i, 2), 0, 16);
+			unsigned long sum = 2 + (address % 256 + address/256 + (i - 9) / 4) + stoul(buf.substr(i + 2, 2), 0, 16) + stoul(buf.substr(i, 2), 0, 16);
 			out << ":02"; //Two byte to fit quartus
 			out << setfill('0') << setw(4) << hex << uppercase << address + (i - 9)/4; //The address
 			out << "00"; //Data
