@@ -1,7 +1,8 @@
-module toplevel(CLOCK_50, KEY, SW, LEDR, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5, VGA_R, VGA_G, VGA_B, VGA_HS, VGA_VS, VGA_BLANK_N, VGA_SYNC_N, VGA_CLK);
+module toplevel(CLOCK_50, KEY, SW, GPIO_1, LEDR, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5, VGA_R, VGA_G, VGA_B, VGA_HS, VGA_VS, VGA_BLANK_N, VGA_SYNC_N, VGA_CLK);
     input CLOCK_50;
     input [3:0]KEY;
     input [9:0]SW;
+    inout [15:0]GPIO_1;
     output [9:0]LEDR;
     output [6:0]HEX0;
     output [6:0]HEX1;
@@ -28,8 +29,8 @@ module toplevel(CLOCK_50, KEY, SW, LEDR, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5, VGA
         .clk(cpu_clk),
         .rst(~KEY[0]),
         .GPIO0(gpio_to_display),
-        .GPIO1(),
-        .GPIO2(),
+        .GPIO1(GPIO_1[7:0]),
+        .GPIO2(GPIO_1[15:8]),
         .SW(SW),
         .LEDR(LEDR),
         .HEX0(HEX0),
