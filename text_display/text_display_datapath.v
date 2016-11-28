@@ -2,7 +2,7 @@
 // Date created: November 23 2016
 // This file contains the components to print text from cpu to VGA
 
-module text_display_datapath(clk, rst, data, rdreq, wrreq, load_buff_reg, inc_cursor, carriage_cursor, display_char, do_clear, plot, fifo_empty, carriage_ascii, clear_screen, done_char, done_clear, VGA_R, VGA_G, VGA_B, VGA_HS, VGA_VS, VGA_BLANK, VGA_SYNC, VGA_CLK);
+module text_display_datapath(clk, rst, data, rdreq, wrreq, load_buff_reg, inc_cursor, carriage_cursor, display_char, do_clear, plot, fifo_empty, new_line_ascii, clear_screen, done_char, done_clear, VGA_R, VGA_G, VGA_B, VGA_HS, VGA_VS, VGA_BLANK, VGA_SYNC, VGA_CLK);
     input clk;
     input rst;
     input [6:0]data;
@@ -16,7 +16,7 @@ module text_display_datapath(clk, rst, data, rdreq, wrreq, load_buff_reg, inc_cu
     input plot;
 
     output fifo_empty;
-    output carriage_ascii;
+    output new_line_ascii;
     output clear_screen;
     output done_char;
     output done_clear;
@@ -38,7 +38,6 @@ module text_display_datapath(clk, rst, data, rdreq, wrreq, load_buff_reg, inc_cu
     wire [127:0]text_out;
     wire [9:0]x;
     wire [8:0]y;
-    wire [127:0]mask_colour;
     wire colour;
     wire [9:0]clear_x;
     wire [8:0]clear_y;
@@ -52,10 +51,9 @@ module text_display_datapath(clk, rst, data, rdreq, wrreq, load_buff_reg, inc_cu
     assign y_final = do_clear ? clear_y : y;
     assign colour_final = do_clear ? clear_colour : colour;
 
-    assign carriage_ascii = (buff_reg_out == 7'd13) ? 1'b1 : 1'b0;
+    assign new_line_ascii = (buff_reg_out == 7'd10) ? 1'b1 : 1'b0;
     assign x = (cursor_x * 'd8) + c_x;
     assign y = (cursor_y * 'd16) + c_y;
-    assign mask_colour = (1 << ((c_y * 'd8) + c_x));
     assign colour = text_out['d127 - ((c_y * 'd8) + c_x)];
 
     text_display_FIFO FIFO

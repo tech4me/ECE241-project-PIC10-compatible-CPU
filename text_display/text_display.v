@@ -17,7 +17,7 @@ module text_display(clk, rst, GPIO, VGA_R, VGA_G, VGA_B, VGA_HS, VGA_VS, VGA_BLA
     output VGA_CLK;
 
     wire fifo_empty;
-    wire carriage_ascii;
+    wire new_line_ascii;
     wire clear_screen;
     wire done_char;
     wire done_clear;
@@ -34,7 +34,7 @@ module text_display(clk, rst, GPIO, VGA_R, VGA_G, VGA_B, VGA_HS, VGA_VS, VGA_BLA
         .clk(clk),
         .rst(rst),
         .fifo_empty(fifo_empty),
-        .carriage_ascii(carriage_ascii),
+        .new_line_ascii(new_line_ascii),
         .clear_screen(clear_screen),
         .done_char(done_char),
         .done_clear(done_clear),
@@ -61,7 +61,7 @@ module text_display(clk, rst, GPIO, VGA_R, VGA_G, VGA_B, VGA_HS, VGA_VS, VGA_BLA
         .do_clear(do_clear),
         .plot(plot),
         .fifo_empty(fifo_empty),
-        .carriage_ascii(carriage_ascii),
+        .new_line_ascii(new_line_ascii),
         .clear_screen(clear_screen),
         .done_char(done_char),
         .done_clear(done_clear),

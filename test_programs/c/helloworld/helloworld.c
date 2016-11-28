@@ -1,10 +1,3 @@
-/* 
- * File:   main.c
- * Author: tech4
- *
- * Created on November 27, 2016, 3:51 PM
- */
-
 #include <htc.h>
 unsigned char output_char = 0;
 
