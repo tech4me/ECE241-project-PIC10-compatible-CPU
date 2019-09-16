@@ -200,12 +200,10 @@ module cpu_controller(clk, rst, reg_address, instruction_reg_out, zero_result, s
             `BTFSC   :
             begin
                 skip_next_instruction <= zero_result;
-                load_f_register();
             end
             `BTFSS   :
             begin
                 skip_next_instruction <= !zero_result;
-                load_f_register();
             end
             `ANDLW   :
             begin
